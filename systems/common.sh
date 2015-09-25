@@ -1,8 +1,9 @@
-GOV2_LOCATION=/media/Gov2/data
+GOV2_LOCATION=/fs/clip-hadoop/collections/gov2/gov2-corpus
+AQUAINT_LOCATION=/fs/clip-qa/corpora/AQUAINT/disk1/nyt
 CW09B_LOCATION=/media/ClueWeb09b/ClueWeb09_English_1
 CW12B_LOCATION=/media/ClueWeb12-B13/DiskB
 
-TOPICS_QRELS=../../topics-and-qrels/
+TOPICS_QRELS=../../topics-and-qrels
 TREC_EVAL=../../eval/trec_eval.9.0/trec_eval
 SAP_EVAL=../../eval/statAP_MQ_eval_v3.pl
 GD_EVAL=../../eval/gdeval
