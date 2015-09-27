@@ -9,7 +9,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.File;
+import org.apache.lucene.util.Version;
 
+import org.apache.lucene.util.Version;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.benchmark.quality.Judge;
 import org.apache.lucene.benchmark.quality.QualityBenchmark;
@@ -30,7 +33,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.similarities.BM25Similarity;
-import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.*;
 
 public class TrecDriver extends QueryDriver {
   public static void main(String[] args) throws Exception {
@@ -50,7 +53,7 @@ public class TrecDriver extends QueryDriver {
     Path qrelsFile = Paths.get(args[1]);
     Path submissionFile = Paths.get(args[2]);
     SubmissionReport submitLog = new SubmissionReport(new PrintWriter(Files.newBufferedWriter(submissionFile, StandardCharsets.UTF_8)), "lucene");
-    FSDirectory dir = FSDirectory.open(Paths.get(args[3]));
+    Directory dir = FSDirectory.open(new File(args[3]));
     String fieldSpec = args.length == 5 ? args[4] : "T"; // default to Title-only if not specified.
     IndexReader reader = DirectoryReader.open(dir);
     IndexSearcher searcher = new IndexSearcher(reader);
@@ -124,7 +127,7 @@ class EnglishQQParser implements QualityQueryParser {
   public Query parse(QualityQuery qq) throws ParseException {
     QueryParser qp = queryParser.get();
     if (qp==null) {
-      qp = new QueryParser(indexField, new EnglishAnalyzer());
+      qp = new QueryParser(Version.LUCENE_43, indexField, new EnglishAnalyzer(Version.LUCENE_43));
       queryParser.set(qp);
     }
     BooleanQuery bq = new BooleanQuery();

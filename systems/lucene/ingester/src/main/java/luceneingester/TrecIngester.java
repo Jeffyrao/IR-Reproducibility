@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import java.io.File;
+import org.apache.lucene.util.Version;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.benchmark.byTask.feeds.TrecContentSource;
@@ -65,9 +67,9 @@ public final class TrecIngester {
 
     args.check();
 
-    final Analyzer a = new EnglishAnalyzer();
+    final Analyzer a = new EnglishAnalyzer(Version.LUCENE_43);
     final TrecContentSource trecSource = createTrecSource(dataDir);
-    final Directory dir = FSDirectory.open(Paths.get(dirPath));
+    final Directory dir = FSDirectory.open(new File(dirPath));
 
     System.out.println("Index path: " + dirPath);
     System.out.println("Doc count limit: " + (docCountLimit == -1 ? "all docs" : ""+docCountLimit));
@@ -79,7 +81,7 @@ public final class TrecIngester {
       InfoStream.setDefault(new PrintStreamInfoStream(System.out));
     }
 
-    final IndexWriterConfig iwc = new IndexWriterConfig(a);
+    final IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_43, a);
 
     if (doUpdate) {
       iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND);

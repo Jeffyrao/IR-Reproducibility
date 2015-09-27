@@ -30,6 +30,9 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.FieldInfo.IndexOptions;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.Field;
 
 class IndexThreads {
 
@@ -121,6 +124,13 @@ class IndexThreads {
     private Document getDocumentFromDocData(DocData dd) {
       Document doc = new Document();
       doc.add(new StringField("docname", dd.getName(), Store.YES));
+      final FieldType textOptions = new FieldType();
+      textOptions.setIndexed(true);
+      textOptions.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
+      textOptions.setStored(true);
+      textOptions.setTokenized(true);   
+      //doc.add(new Field("body", dd.getTitle(), textOptions));
+      //doc.add(new Field("body", dd.getBody(), textOptions));
       if(positions) {
         doc.add(new TextField("body", dd.getTitle(), Store.NO));
         doc.add(new TextField("body", dd.getBody(), Store.NO));
